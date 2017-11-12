@@ -11,7 +11,8 @@
 
 #include <EssexEngineFileSystemDaemon/FileSystemDaemon.h>
 
-EssexEngine::Daemons::FileSystem::FileSystemDaemon::FileSystemDaemon(WeakPointer<Context> _context):BaseDaemon(_context) {}
+EssexEngine::Daemons::FileSystem::FileSystemDaemon::FileSystemDaemon(WeakPointer<Context> _context):BaseDaemon(_context),
+    fileCache(_context->GetDaemon<Core::Logging::LogDaemon>()) {}
 
 EssexEngine::Daemons::FileSystem::FileSystemDaemon::~FileSystemDaemon() {}
 
@@ -31,8 +32,14 @@ void EssexEngine::Daemons::FileSystem::FileSystemDaemon::CloseZipArchive() {
 	GetDriver()->CloseZipArchive();
 }
 
-EssexEngine::SharedPointer<EssexEngine::Daemons::FileSystem::IFileBuffer> EssexEngine::Daemons::FileSystem::FileSystemDaemon::ReadFile(std::string filename) {
-    return GetDriver()->ReadFile(filename);
+EssexEngine::CachedPointer<EssexEngine::Daemons::FileSystem::IFileBuffer> EssexEngine::Daemons::FileSystem::FileSystemDaemon::ReadFile(std::string filename) {
+    if (!fileCache.HasKey(filename)) {
+        WeakPointer<IFileBuffer> file = GetDriver()->ReadFile(filename);
+
+        fileCache.Cache(filename, file);
+    }
+
+    return fileCache.Get(filename);
 }
 
 void EssexEngine::Daemons::FileSystem::FileSystemDaemon::SaveFile(std::string filename, void* data, uint64_t size) {

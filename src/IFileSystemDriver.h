@@ -13,7 +13,7 @@
 #include <string>
 
 #include <EssexEngineCore/IDriver.h>
-#include <EssexEngineCore/SharedPointer.h>
+#include <EssexEngineCore/WeakPointer.h>
 #include <EssexEngineFileSystemDaemon/IFileBuffer.h>
 
 namespace EssexEngine{
@@ -24,7 +24,7 @@ namespace FileSystem{
 		public:
 			virtual void LoadZipArchive(std::string filepath) = 0;
             virtual void CloseZipArchive() = 0;
-            virtual SharedPointer<IFileBuffer> ReadFile(std::string filename) = 0;
+            virtual WeakPointer<IFileBuffer> ReadFile(std::string filename) = 0;
             virtual void SaveFile(std::string filename, void* data, uint64_t size) = 0;
 		private:
 	};

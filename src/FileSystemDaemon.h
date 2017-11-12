@@ -10,8 +10,15 @@
  */
 #pragma once
 
-#include <EssexEngineFileSystemDaemon/IFileSystemDriver.h>
+#include <utility>
+
 #include <EssexEngineCore/BaseDaemon.h>
+#include <EssexEngineCore/LogDaemon.h>
+#include <EssexEngineCore/CachedPointer.h>
+#include <EssexEngineCore/ResourceCache.h>
+#include <EssexEngineCore/WeakPointer.h>
+
+#include <EssexEngineFileSystemDaemon/IFileSystemDriver.h>
 
 namespace EssexEngine{
 namespace Daemons{
@@ -23,8 +30,8 @@ namespace FileSystem{
 			~FileSystemDaemon();
 			
 			void Init() {
-				if(GetContext()->HasDriver<Core::Logging::ILogDriver>()) {
-					GetContext()->GetDriver<Core::Logging::ILogDriver>()->LogLine(
+				if(GetContext()->HasDaemon<Core::Logging::LogDaemon>()) {
+					GetContext()->GetDaemon<Core::Logging::LogDaemon>()->LogLine(
 						"Loading Daemon [%s] [%s]",
 						GetDaemonName().c_str(),
 						GetDaemonVersion().c_str()
@@ -36,8 +43,9 @@ namespace FileSystem{
 			
 			void LoadZipArchive(std::string filepath);
             void CloseZipArchive();
-            SharedPointer<IFileBuffer> ReadFile(std::string filename);
+            CachedPointer<IFileBuffer> ReadFile(std::string filename);
             void SaveFile(std::string filename, void* data, uint64_t size);
 		private:
+			Core::Utils::ResourceCache<IFileBuffer> fileCache;
 	};
 }}};

@@ -32,7 +32,7 @@ void EssexEngine::Daemons::FileSystem::FileSystemDaemon::CloseZipArchive() {
 	GetDriver()->CloseZipArchive();
 }
 
-EssexEngine::CachedPointer<EssexEngine::Daemons::FileSystem::IFileBuffer> EssexEngine::Daemons::FileSystem::FileSystemDaemon::ReadFile(std::string filename) {
+EssexEngine::CachedPointer<std::string, EssexEngine::Daemons::FileSystem::IFileBuffer> EssexEngine::Daemons::FileSystem::FileSystemDaemon::ReadFile(std::string filename) {
     if (!fileCache.HasKey(filename)) {
         WeakPointer<IFileBuffer> file = GetDriver()->ReadFile(filename);
 

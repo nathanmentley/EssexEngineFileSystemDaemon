@@ -11,6 +11,7 @@
 #pragma once
 
 #include <utility>
+#include <string>
 
 #include <EssexEngineCore/BaseDaemon.h>
 #include <EssexEngineCore/LogDaemon.h>
@@ -43,9 +44,9 @@ namespace FileSystem{
 			
 			void LoadZipArchive(std::string filepath);
             void CloseZipArchive();
-            CachedPointer<IFileBuffer> ReadFile(std::string filename);
+            CachedPointer<std::string, IFileBuffer> ReadFile(std::string filename);
             void SaveFile(std::string filename, void* data, uint64_t size);
 		private:
-			Core::Utils::ResourceCache<IFileBuffer> fileCache;
+			Core::Utils::ResourceCache<std::string, IFileBuffer> fileCache;
 	};
 }}};

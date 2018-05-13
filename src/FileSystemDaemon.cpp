@@ -16,14 +16,6 @@ EssexEngine::Daemons::FileSystem::FileSystemDaemon::FileSystemDaemon(WeakPointer
 
 EssexEngine::Daemons::FileSystem::FileSystemDaemon::~FileSystemDaemon() {}
 
-extern "C" {
-    void daemon_init(EssexEngine::WeakPointer<EssexEngine::Context> context) {
-        context->RegisterDaemon<EssexEngine::Daemons::FileSystem::FileSystemDaemon>(
-            new EssexEngine::Daemons::FileSystem::FileSystemDaemon(context)
-        );
-    }
-}
-
 void EssexEngine::Daemons::FileSystem::FileSystemDaemon::LoadZipArchive(std::string filepath) {
     GetDriver()->LoadZipArchive(filepath);
 }
